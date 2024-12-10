@@ -1,0 +1,38 @@
+<!DOCTYPE html> <html> <head>
+  <title>lime ai v1.0</title> 
+  <script src="https://unpkg.com/axios/dist/latest.min.js">
+    
+  </script> <style> #chatbox { width:500px; height:300px; border:1px solid #ccc; margin-top:20px; border-radius:5px; padding:10px; font-family:Arial, sans-serif; } #chatbox { width:100%; height:200px; margin-top:20px; border:1px solid #ddd border-top:0px; padding:10px; overflow-y:scroll; font-family:Arial, sans-serif; }#userInput, #button { width:100%; font-family:Arial, sans-serif; } 
+  </style> </head> <body> <div id="chatbox">Hi there! I'm an AI chatbot that can access information from the internet to have a conversation. Ask me anything! :)</div> 
+    <input type="text" id="userInput" /> <button onclick="processChat()">Send</button> <script> function processChat() { let userText = document.getElementById("userInput").value;
+
+// Send user input to an API that fetches chatbot responses
+axios.get('https://api.venice.so/ask?userText=' + encodeURIComponent(userText))
+  .then(function(response) {
+    // Display bot response
+    let reply = document.createElement("div");
+    reply.innerHTML = "<strong>" + response.data.botText + "</strong>";
+    document.getElementById("chatbox").innerHTML = reply.outerHTML + document.getElementById("chatbox").innerHTML;
+    
+    // Clear user input
+    document.getElementById("userInput").value = "";
+    
+    // Scroll to the bottom of the chatbox after a new message is received
+    document.querySelector('#root').scrollTop = document.querySelector('#root').scrollHeight;
+  })
+  .catch(function(error) {
+    alert("Error fetching chatbot response: " + error);
+  });
+}
+
+// Load the chatbot and start the conversation
+window.onload = function() {
+// Send an initial message to get things started
+setInterval(() => {
+let newMessage = document.createElement("div");
+newMessage.innerHTML = "<strong>Hey! What would you like to learn more about? I'm happy to discuss any topics you'd like to explore.</strong>";
+document.getElementById("chatbox").insertBefore(newMessage, document.getElementById("chatbox").firstChild, 0);
+}, 1);
+</script>
+
+</body> </html>
